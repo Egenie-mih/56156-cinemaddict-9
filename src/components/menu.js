@@ -1,9 +1,24 @@
-export const createMenuLayout = () => {
-  return `<nav class="main-navigation">
-    <a href="#all" class="main-navigation__item main-navigation__item--active">All movies</a>
-    <a href="#watchlist" class="main-navigation__item">Watchlist <span class="main-navigation__item-count">13</span></a>
-    <a href="#history" class="main-navigation__item">History <span class="main-navigation__item-count">4</span></a>
-    <a href="#favorites" class="main-navigation__item">Favorites <span class="main-navigation__item-count">8</span></a>
+const FILTERS = [
+  `All movies`,
+  `Watchlist`,
+  `History`,
+  `Favorites`
+];
+
+const findCountFilter = (filtersData, filterTitle) => filtersData.find((filter) => filter.title === filterTitle).count;
+const getFilterTemplate = (filtersData, filter) => `
+  <a href="#${filter.toLowerCase()}" class="main-navigation__item">
+    ${filter}
+    ${filter === `All movies` ? `` : `
+    <span class="main-navigation__item-count">
+      ${findCountFilter(filtersData, filter)}
+    </span>`}
+  </a>
+`;
+
+export const createMenuLayout = (filtersData) => `
+  <nav class="main-navigation">
+    ${FILTERS.map((filter) => getFilterTemplate(filtersData, filter)).join(` `)}
     <a href="#stats" class="main-navigation__item main-navigation__item--additional">Stats</a>
-  </nav>`;
-};
+  </nav>
+`;
